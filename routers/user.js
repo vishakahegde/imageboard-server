@@ -21,6 +21,9 @@ router.get("/", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { email, password, fullName } = req.body;
+    console.log("Data:", email, password, fullName);
+    console.log("request:", req.body);
+
     if (!email || !password || !fullName) {
       res.status(400).send("missing parameters");
     } else {

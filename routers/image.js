@@ -23,6 +23,22 @@ async function getImageByPk(id) {
   }
 }
 
+async function getImageByTitle(title) {
+  try {
+    console.log("title", title);
+    const image = await Image.findOne({ where: { title: title } });
+    console.log("Image:", image);
+    return image;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+router.get("/title/:title", async (req, res, next) => {
+  const image = await getImageByTitle(req.params.title);
+  res.send(image);
+});
+
 router.get("/:id", async (req, res, next) => {
   const image = await getImageByPk(req.params.id);
   res.send(image);
@@ -33,20 +49,34 @@ router.get("/", async (req, res, next) => {
   res.send(allImages);
 });
 
-async function createImages() {
-  try {
-    const image1 = await Image.create({
-      title: "KungFu Panda",
-      url: `http://www.kungfupandamovie-ph.com/img/gallery/gallery0.jpg`,
-    });
-  } catch (e) {
-    console.error(e);
-  }
-}
+// async function createImages(body) {
+//   try {
+//     const image1 = await Image.create({
+//       title: "KungFu Panda",
+//       url: `http://www.kungfupandamovie-ph.com/img/gallery/gallery0.jpg`,
+//     });
+//   } catch (e) {
+//     console.error(e);
+//   }
+
+// }
 
 router.post("/", async (req, res, next) => {
-  createImages();
-  res.send("Success");
+  try {
+    const { title, url } = req.body;
+
+    if (!title || !url) {
+      res.status(400).send("missing parameters");
+    } else {
+      const newImage = await Image.create({
+        title,
+        url,
+      });
+      res.json(newImage);
+    }
+  } catch (e) {
+    next(e);
+  }
 });
 
 module.exports = router;
