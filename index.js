@@ -1,7 +1,8 @@
 const express = require("express");
-const user = require("./routers/user");
-const image = require("./routers/image");
-const auth = require("./routers/auth");
+const userRouter = require("./routers/user");
+const imageRouter = require("./routers/image");
+const authRouter = require("./routers/auth");
+const authMiddleware = require("./auth/middleware");
 
 const app = express();
 
@@ -9,9 +10,9 @@ const jsonParser = express.json();
 
 app.use(jsonParser);
 
-app.use("/users", user);
-app.use("/images", image);
-app.use("/auth", auth);
+app.use("/users", userRouter);
+app.use("/images", authMiddleware, imageRouter);
+app.use("/auth", authRouter);
 
 const port = 4000;
 

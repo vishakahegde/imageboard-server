@@ -1,18 +1,19 @@
 const { Router } = require("express");
 const Image = require("../models").image;
 const { toData } = require("../auth/jwt");
+const authMiddleware = require("../auth/middleware");
 
 const router = new Router();
 
-async function getImages() {
-  try {
-    const allImages = await Image.findAll();
-    // console.log("Images", allImages);
-    return allImages.map((image) => image.get({ plain: true }));
-  } catch (e) {
-    console.error(e);
-  }
-}
+// async function getImages() {
+//   try {
+//     const allImages = await Image.findAll();
+//     // console.log("Images", allImages);
+//     return allImages.map((image) => image.get({ plain: true }));
+//   } catch (e) {
+//     console.error(e);
+//   }
+// }
 
 async function getImageByPk(id) {
   try {
@@ -45,9 +46,18 @@ router.get("/:id", async (req, res, next) => {
   res.send(image);
 });
 
+// router.get("/", async (req, res, next) => {
+//   const allImages = await getImages();
+//   res.send(allImages);
+// });
+
 router.get("/", async (req, res, next) => {
-  const allImages = await getImages();
-  res.send(allImages);
+  try {
+    const allImages = await Image.findAll();
+    res.json(allImages);
+  } catch (e) {
+    next(e);
+  }
 });
 
 // async function createImages(body) {
