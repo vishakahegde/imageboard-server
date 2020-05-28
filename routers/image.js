@@ -13,6 +13,21 @@ async function getImages() {
   }
 }
 
+async function getImageByPk(id) {
+  try {
+    const image = await Image.findByPk(id);
+    console.log("Image:", image);
+    return image;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+router.get("/:id", async (req, res, next) => {
+  const image = await getImageByPk(req.params.id);
+  res.send(image);
+});
+
 router.get("/", async (req, res, next) => {
   const allImages = await getImages();
   res.send(allImages);
