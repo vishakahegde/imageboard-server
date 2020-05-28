@@ -18,7 +18,7 @@ const router = new Router();
 async function getImageByPk(id) {
   try {
     const image = await Image.findByPk(id);
-    console.log("Image:", image);
+
     return image;
   } catch (e) {
     console.error(e);
@@ -29,7 +29,7 @@ async function getImageByTitle(title) {
   try {
     console.log("title", title);
     const image = await Image.findOne({ where: { title: title } });
-    console.log("Image:", image);
+
     return image;
   } catch (e) {
     console.error(e);
